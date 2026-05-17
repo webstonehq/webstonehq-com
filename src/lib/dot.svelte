@@ -1,1 +1,0 @@
-<span class="font-extrabold text-pink-500">.</span>
