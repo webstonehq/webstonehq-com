@@ -1,3 +1,108 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/* Dark mode is class-based (`.dark` on <html>), managed by the `mode-watcher`
+   dependency (<ModeWatcher> in +layout.svelte) — it follows the OS, persists an
+   explicit toggle choice, and handles the no-FOUC head script. Class-only, never
+   @media prefers-color-scheme, so an explicit choice overrides the OS. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Webstone design tokens → Tailwind theme.
+   Generates utilities like bg-ink, text-accent, border-line, font-mono,
+   rounded-card, animate-fade-in. The prototype's hand-written CSS is gone;
+   everything else lives as utilities in the markup.
+   ───────────────────────────────────────────────────────────────────────── */
+@theme {
+	--color-ink: #0a0a09;
+	--color-paper: #faf9f6;
+	--color-line: rgb(10 10 9 / 0.1);
+	--color-line-strong: rgb(10 10 9 / 0.16);
+	--color-muted: #6b6960;
+	--color-accent: #e64980;
+	--color-accent-ink: #b32861;
+	--color-good: #1f8a5b;
+
+	--color-stone-50: #f7f5f1;
+	--color-stone-100: #efece5;
+	--color-stone-200: #e3dfd5;
+	--color-stone-300: #c9c3b3;
+	--color-stone-500: #8a8472;
+	--color-stone-700: #44423a;
+	--color-stone-900: #15140f;
+
+	--font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+	--font-serif: 'Instrument Serif', 'Times New Roman', serif;
+
+	--radius-card: 18px;
+
+	--animate-fade-in: fade-in 0.35s ease;
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+}
+
+/* Dark theme: redefine the @theme custom properties under `.dark`. Because every
+   utility compiles to var(--color-*), overriding the variables flips the whole
+   site with no markup changes. Unlayered so it reliably beats the themed :root.
+   Role-preserving (the stone scale is used directionally), WCAG AA verified.
+   The `bg-ink text-paper` inverse bands flip to light for free via ink↔paper. */
+.dark {
+	--color-ink: #f5f3ef;
+	--color-paper: #100f0d;
+	--color-line: rgb(245 243 239 / 0.1);
+	--color-line-strong: rgb(245 243 239 / 0.14);
+	--color-muted: #a3a097;
+	--color-accent: #e64980;
+	--color-accent-ink: #ff85ad;
+	--color-good: #3ecf8e;
+
+	--color-stone-50: #171613;
+	--color-stone-100: #1d1c18;
+	--color-stone-200: #262420;
+	--color-stone-300: #33312b;
+	--color-stone-500: #7d7a70;
+	--color-stone-700: #c4c1b6;
+	--color-stone-900: #f0eee9;
+}
+
+/* Unavoidable base: things Tailwind utilities can't express on their own. */
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+	body {
+		font-feature-settings: 'ss01', 'ss02', 'cv11';
+		text-rendering: optimizeLegibility;
+	}
+	::selection {
+		background: var(--color-accent);
+		color: #fff;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.001ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.001ms !important;
+		}
+		[data-reveal] {
+			opacity: 1 !important;
+			transform: none !important;
+		}
+	}
+}
