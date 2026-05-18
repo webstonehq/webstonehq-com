@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { mode, toggleMode } from 'mode-watcher';
 
+	let { class: klass = '' }: { class?: string } = $props();
+
 	const isDark = $derived(mode.current === 'dark');
 </script>
 
@@ -10,7 +12,7 @@
 	aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
 	aria-pressed={isDark}
 	title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-	class="rounded-lg p-2 text-stone-700 transition-[background,color] duration-[120ms] ease-[ease] hover:bg-stone-100 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+	class="rounded-lg p-2 text-stone-700 transition-[background,color] duration-[120ms] ease-[ease] hover:bg-stone-100 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent {klass}"
 >
 	{#if isDark}
 		<svg
