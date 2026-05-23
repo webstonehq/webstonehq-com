@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import Arrow from '$lib/components/arrow.svelte';
 	import Eyebrow from '$lib/components/eyebrow.svelte';
 	import StoneMark from '$lib/components/stone-mark.svelte';
 	import Field from '$lib/components/field.svelte';
 	import Container from '$lib/components/container.svelte';
 	import Btn from '$lib/components/btn.svelte';
+
+	let { form: actionData } = $props();
 
 	const inputCls =
 		'h-11 w-full rounded-[10px] border border-line-strong bg-paper px-3.5 font-sans text-[14.5px] text-ink outline-none';
@@ -31,6 +34,18 @@
 		message: ''
 	});
 	let submitted = $state(false);
+	let submitting = $state(false);
+
+	// Reflect a successful action result, and rehydrate values on validation errors
+	// (so the user doesn't lose what they typed if JS is off).
+	$effect(() => {
+		if (actionData && 'success' in actionData && actionData.success) {
+			submitted = true;
+		}
+		if (actionData && 'values' in actionData && actionData.values) {
+			form = { ...form, ...actionData.values };
+		}
+	});
 </script>
 
 <svelte:head>
@@ -106,26 +121,50 @@
 
 					<!-- right — form -->
 					<form
-						onsubmit={(e) => {
-							e.preventDefault();
-							submitted = true;
+						method="POST"
+						use:enhance={() => {
+							submitting = true;
+							return async ({ update }) => {
+								await update({ reset: false });
+								submitting = false;
+							};
 						}}
 						class="flex flex-col gap-5 rounded-card border border-line bg-paper p-8"
 					>
 						<div class="grid grid-cols-2 gap-4 max-[920px]:grid-cols-1">
 							<Field label="Your name" required>
-								<input bind:value={form.name} required type="text" class={inputCls} />
+								<input
+									bind:value={form.name}
+									required
+									type="text"
+									name="name"
+									autocomplete="name"
+									class={inputCls}
+								/>
 							</Field>
 							<Field label="Work email" required>
-								<input bind:value={form.email} required type="email" class={inputCls} />
+								<input
+									bind:value={form.email}
+									required
+									type="email"
+									name="email"
+									autocomplete="email"
+									class={inputCls}
+								/>
 							</Field>
 						</div>
 						<Field label="Company">
-							<input bind:value={form.company} type="text" class={inputCls} />
+							<input
+								bind:value={form.company}
+								type="text"
+								name="company"
+								autocomplete="organization"
+								class={inputCls}
+							/>
 						</Field>
 						<div class="grid grid-cols-2 gap-4 max-[920px]:grid-cols-1">
 							<Field label="Team size">
-								<select bind:value={form.size} class={inputCls}>
+								<select bind:value={form.size} name="size" class={inputCls}>
 									<option>1–50</option>
 									<option>50–200</option>
 									<option>200–1000</option>
@@ -133,7 +172,7 @@
 								</select>
 							</Field>
 							<Field label="Timeline">
-								<select bind:value={form.timeline} class={inputCls}>
+								<select bind:value={form.timeline} name="timeline" class={inputCls}>
 									<option>Within a month</option>
 									<option>This quarter</option>
 									<option>This year</option>
@@ -155,6 +194,7 @@
 									</button>
 								{/each}
 							</div>
+							<input type="hidden" name="topic" value={form.topic} />
 						</Field>
 						<Field
 							label="What’s the situation?"
@@ -163,11 +203,26 @@
 							<textarea
 								bind:value={form.message}
 								rows={5}
+								name="message"
 								placeholder="We’ve been talking about AI for a year. Our CFO is starting to ask. Honestly, I’m not sure where to start."
 								class={textareaCls}
 							></textarea>
 						</Field>
-						<Btn type="submit" size="lg" class="mt-1 self-start">Send it<Arrow /></Btn>
+						<!-- honeypot — hidden from humans, tempting to bots -->
+						<input
+							type="text"
+							name="website"
+							tabindex="-1"
+							autocomplete="off"
+							aria-hidden="true"
+							class="absolute -left-[10000px] h-0 w-0 opacity-0"
+						/>
+						{#if actionData && 'error' in actionData && actionData.error}
+							<p class="text-[13px] text-accent">{actionData.error}</p>
+						{/if}
+						<Btn type="submit" size="lg" class="mt-1 self-start" disabled={submitting}>
+							{submitting ? 'Sending…' : 'Send it'}<Arrow />
+						</Btn>
 						<p class="mt-1 text-[12.5px] text-muted">
 							We reply within one business day. No SDR follow-ups. Promise.
 						</p>
