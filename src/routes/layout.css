@@ -33,7 +33,6 @@
 	--quote-ink: #2a2520;
 	--badge-bg: #1a1714;
 	--badge-text: #fbf8ef;
-	--logo-bg: #1a1714;
 	--btn-dark-bg: #1a1714;
 	--btn-dark-text: #fbf8ef;
 	--shadow-card: rgba(26, 23, 20, 0.32);
@@ -71,7 +70,6 @@
 	--quote-ink: #ece6d8;
 	--badge-bg: #ede7da;
 	--badge-text: #1a1714;
-	--logo-bg: #2a231b;
 	--btn-dark-bg: #2d2620;
 	--btn-dark-text: #f3eee2;
 	--shadow-card: rgba(0, 0, 0, 0.5);
@@ -111,7 +109,6 @@
 	--color-quote-ink: var(--quote-ink);
 	--color-badge-bg: var(--badge-bg);
 	--color-badge-text: var(--badge-text);
-	--color-logo-bg: var(--logo-bg);
 	--color-btn-dark-bg: var(--btn-dark-bg);
 	--color-btn-dark-text: var(--btn-dark-text);
 	--color-form-card: var(--form-card);

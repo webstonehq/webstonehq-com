@@ -8,9 +8,7 @@
 >
 	<div class="mx-auto flex max-w-[1140px] items-center justify-between gap-5 px-7 py-4">
 		<a href="#top" class="flex items-center gap-[11px] no-underline">
-			<span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-logo-bg">
-				<WebstoneMark />
-			</span>
+			<WebstoneMark class="h-7 w-auto shrink-0" />
 			<span class="text-[16px] font-bold tracking-[-0.015em] text-ink">Webstone Technologies</span>
 		</a>
 

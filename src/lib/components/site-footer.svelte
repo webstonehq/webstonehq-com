@@ -6,9 +6,7 @@
 	<div class="mx-auto grid max-w-[1140px] grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-10">
 		<div class="max-w-[320px]">
 			<div class="mb-4 flex items-center gap-[11px]">
-				<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1F1C18]">
-					<WebstoneMark />
-				</span>
+				<WebstoneMark class="h-7 w-auto shrink-0" />
 				<span class="text-[16px] font-bold text-[#FBF8EF]">Webstone Technologies</span>
 			</div>
 			<p class="m-0 mb-[18px] text-[14px] leading-[1.6] text-[#8E877A]">
