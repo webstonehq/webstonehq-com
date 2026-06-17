@@ -15,7 +15,7 @@ To recreate this project with the same configuration:
 
 ```sh
 # recreate this project
-npx sv@0.15.3 create --template minimal --types ts --add tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:cloudflare+cfTarget:workers" --install npm .
+npx sv@0.16.1 create --template minimal --types ts --add tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:cloudflare+cfTarget:workers" --install npm .
 ```
 
 ## Developing

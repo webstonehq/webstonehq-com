@@ -1,108 +1,181 @@
 @import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
 
-/* Dark mode is class-based (`.dark` on <html>), managed by the `mode-watcher`
-   dependency (<ModeWatcher> in +layout.svelte) — it follows the OS, persists an
-   explicit toggle choice, and handles the no-FOUC head script. Class-only, never
-   @media prefers-color-scheme, so an explicit choice overrides the OS. */
-@custom-variant dark (&:where(.dark, .dark *));
-
-/* ─────────────────────────────────────────────────────────────────────────
-   Webstone design tokens → Tailwind theme.
-   Generates utilities like bg-ink, text-accent, border-line, font-mono,
-   rounded-card, animate-fade-in. The prototype's hand-written CSS is gone;
-   everything else lives as utilities in the markup.
-   ───────────────────────────────────────────────────────────────────────── */
-@theme {
-	--color-ink: #0a0a09;
-	--color-paper: #faf9f6;
-	--color-line: rgb(10 10 9 / 0.1);
-	--color-line-strong: rgb(10 10 9 / 0.16);
-	--color-muted: #6b6960;
-	--color-accent: #e64980;
-	--color-accent-ink: #b32861;
-	--color-good: #1f8a5b;
-
-	--color-stone-50: #f7f5f1;
-	--color-stone-100: #efece5;
-	--color-stone-200: #e3dfd5;
-	--color-stone-300: #c9c3b3;
-	--color-stone-500: #8a8472;
-	--color-stone-700: #44423a;
-	--color-stone-900: #15140f;
-
-	--font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-	--font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-	--font-serif: 'Instrument Serif', 'Times New Roman', serif;
-
-	--radius-card: 18px;
-
-	--animate-fade-in: fade-in 0.35s ease;
-
-	@keyframes fade-in {
-		from {
-			opacity: 0;
-			transform: translateY(6px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+/* ---------------------------------------------------------------------------
+   Design tokens — warm "Webstone" stone palette.
+   Light is the default (:root); dark is applied via the `.dark` class that the
+   `mode-watcher` package toggles on <html>. Constant-dark surfaces (form band,
+   footer, "Bring us in" card) use literal hex values in the markup and
+   intentionally stay dark in both themes.
+--------------------------------------------------------------------------- */
+:root {
+	--paper: #fbf8ef;
+	--paper-2: #f6f2e6;
+	--surface: #ffffff;
+	--ink: #1a1714;
+	--ink-soft: #57534b;
+	--muted: #6f6a5e;
+	--faint: #a8a294;
+	--border: #ece6d7;
+	--border-2: #e6e1d2;
+	--divider: #eae3d3;
+	--dash: #e2dbc9;
+	--track: #f0eadb;
+	--nav-bg: rgba(251, 248, 239, 0.82);
+	--nav-border: #ede8da;
+	--green: #5e7a1e;
+	--green-soft: #eef1e0;
+	--amber: #d9a441;
+	--amber-text: #b68a2e;
+	--accent: #c0532e;
+	--accent-soft: #fbeee4;
+	--accent-border: #f0dcc9;
+	--on-accent: #fbf8ef;
+	--quote-ink: #2a2520;
+	--badge-bg: #1a1714;
+	--badge-text: #fbf8ef;
+	--logo-bg: #1a1714;
+	--btn-dark-bg: #1a1714;
+	--btn-dark-text: #fbf8ef;
+	--shadow-card: rgba(26, 23, 20, 0.32);
+	--form-card: #fbf8ef;
+	--form-card-edge: #fbf8ef;
+	--input-bg: #ffffff;
+	--input-border: #e6e1d2;
+	--darkcard-border: #1a1714;
+	--pill-dot: #d9d2c0;
 }
 
-/* Dark theme: redefine the @theme custom properties under `.dark`. Because every
-   utility compiles to var(--color-*), overriding the variables flips the whole
-   site with no markup changes. Unlayered so it reliably beats the themed :root.
-   Role-preserving (the stone scale is used directionally), WCAG AA verified.
-   The `bg-ink text-paper` inverse bands flip to light for free via ink↔paper. */
 .dark {
-	--color-ink: #f5f3ef;
-	--color-paper: #100f0d;
-	--color-line: rgb(245 243 239 / 0.1);
-	--color-line-strong: rgb(245 243 239 / 0.14);
-	--color-muted: #a3a097;
-	--color-accent: #e64980;
-	--color-accent-ink: #ff85ad;
-	--color-good: #3ecf8e;
-
-	--color-stone-50: #171613;
-	--color-stone-100: #1d1c18;
-	--color-stone-200: #262420;
-	--color-stone-300: #33312b;
-	--color-stone-500: #7d7a70;
-	--color-stone-700: #c4c1b6;
-	--color-stone-900: #f0eee9;
+	--paper: #15110c;
+	--paper-2: #1e1a14;
+	--surface: #221d16;
+	--ink: #f3eee2;
+	--ink-soft: #c3bbac;
+	--muted: #a39b8b;
+	--faint: #7c7565;
+	--border: #2c2720;
+	--border-2: #363027;
+	--divider: #2c2720;
+	--dash: #3a332a;
+	--track: #2a251e;
+	--nav-bg: rgba(21, 17, 12, 0.85);
+	--nav-border: #2a251e;
+	--green: #a6c457;
+	--green-soft: #232a12;
+	--amber: #e0b25a;
+	--amber-text: #d7a94e;
+	--accent: #dd6b3e;
+	--accent-soft: #2c1d13;
+	--accent-border: #3d2818;
+	--on-accent: #fbf8ef;
+	--quote-ink: #ece6d8;
+	--badge-bg: #ede7da;
+	--badge-text: #1a1714;
+	--logo-bg: #2a231b;
+	--btn-dark-bg: #2d2620;
+	--btn-dark-text: #f3eee2;
+	--shadow-card: rgba(0, 0, 0, 0.5);
+	--form-card: #221d16;
+	--form-card-edge: #36302f;
+	--input-bg: #1a1610;
+	--input-border: #38312a;
+	--darkcard-border: #38312a;
+	--pill-dot: #4a4338;
 }
 
-/* Unavoidable base: things Tailwind utilities can't express on their own. */
-@layer base {
+/* Expose tokens to Tailwind so utilities like `bg-paper`, `text-ink-soft`,
+   `border-border-2`, `font-display` resolve to the (theme-aware) custom
+   properties above. `inline` keeps the var() references live at runtime. */
+@theme inline {
+	--color-paper: var(--paper);
+	--color-paper-2: var(--paper-2);
+	--color-surface: var(--surface);
+	--color-ink: var(--ink);
+	--color-ink-soft: var(--ink-soft);
+	--color-muted: var(--muted);
+	--color-faint: var(--faint);
+	--color-border: var(--border);
+	--color-border-2: var(--border-2);
+	--color-divider: var(--divider);
+	--color-dash: var(--dash);
+	--color-track: var(--track);
+	--color-nav-border: var(--nav-border);
+	--color-green: var(--green);
+	--color-green-soft: var(--green-soft);
+	--color-amber: var(--amber);
+	--color-amber-text: var(--amber-text);
+	--color-accent: var(--accent);
+	--color-accent-soft: var(--accent-soft);
+	--color-accent-border: var(--accent-border);
+	--color-on-accent: var(--on-accent);
+	--color-quote-ink: var(--quote-ink);
+	--color-badge-bg: var(--badge-bg);
+	--color-badge-text: var(--badge-text);
+	--color-logo-bg: var(--logo-bg);
+	--color-btn-dark-bg: var(--btn-dark-bg);
+	--color-btn-dark-text: var(--btn-dark-text);
+	--color-form-card: var(--form-card);
+	--color-form-card-edge: var(--form-card-edge);
+	--color-input-bg: var(--input-bg);
+	--color-input-border: var(--input-border);
+	--color-darkcard-border: var(--darkcard-border);
+	--color-pill-dot: var(--pill-dot);
+
+	--font-display: 'Newsreader', Georgia, serif;
+	--font-body: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-body);
+	-webkit-font-smoothing: antialiased;
+}
+
+::selection {
+	background: var(--accent);
+	color: var(--on-accent);
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: var(--faint);
+}
+
+@keyframes ws-fade {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes ws-gauge {
+	from {
+		width: 0;
+	}
+	to {
+		width: var(--ws-gauge-to, 72%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
 	html {
-		scroll-behavior: smooth;
+		scroll-behavior: auto;
 	}
-	body {
-		font-feature-settings: 'ss01', 'ss02', 'cv11';
-		text-rendering: optimizeLegibility;
-	}
-	::selection {
-		background: var(--color-accent);
-		color: #fff;
-	}
-	@media (prefers-reduced-motion: reduce) {
-		html {
-			scroll-behavior: auto;
-		}
-		*,
-		*::before,
-		*::after {
-			animation-duration: 0.001ms !important;
-			animation-iteration-count: 1 !important;
-			transition-duration: 0.001ms !important;
-		}
-		[data-reveal] {
-			opacity: 1 !important;
-			transform: none !important;
-		}
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
 	}
 }

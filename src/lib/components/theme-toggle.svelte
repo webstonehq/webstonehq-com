@@ -1,48 +1,33 @@
 <script lang="ts">
 	import { mode, toggleMode } from 'mode-watcher';
-
-	let { class: klass = '' }: { class?: string } = $props();
-
-	const isDark = $derived(mode.current === 'dark');
 </script>
 
 <button
 	type="button"
 	onclick={toggleMode}
-	aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-	aria-pressed={isDark}
-	title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-	class="rounded-lg p-2 text-stone-700 transition-[background,color] duration-[120ms] ease-[ease] hover:bg-stone-100 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent {klass}"
+	aria-label="Toggle {mode.current === 'dark' ? 'light' : 'dark'} mode"
+	class="flex h-9 w-9 items-center justify-center rounded-[9px] border border-border-2 bg-surface text-ink-soft"
 >
-	{#if isDark}
-		<svg
-			width="18"
-			height="18"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.6"
-			stroke-linecap="round"
-			aria-hidden="true"
-		>
-			<circle cx="12" cy="12" r="4" />
+	{#if mode.current === 'dark'}
+		<!-- Sun: switch back to light -->
+		<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+			<circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.7" />
 			<path
-				d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"
+				d="M12 2.5v2.4M12 19.1v2.4M21.5 12h-2.4M4.9 12H2.5M18.7 5.3l-1.7 1.7M7 17l-1.7 1.7M18.7 18.7L17 17M7 7L5.3 5.3"
+				stroke="currentColor"
+				stroke-width="1.7"
+				stroke-linecap="round"
 			/>
 		</svg>
 	{:else}
-		<svg
-			width="18"
-			height="18"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="1.6"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			aria-hidden="true"
-		>
-			<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" />
+		<!-- Moon: switch to dark -->
+		<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+			<path
+				d="M20 13.5A8 8 0 0110.5 4a7 7 0 109.5 9.5z"
+				stroke="currentColor"
+				stroke-width="1.7"
+				stroke-linejoin="round"
+			/>
 		</svg>
 	{/if}
 </button>
